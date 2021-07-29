@@ -5,11 +5,15 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Текущий файл",
+            "name": "Python: Django",
             "type": "python",
             "request": "launch",
-            "program": "${file}",
-            "console": "integratedTerminal"
-        }
+            "program": "${workspaceFolder}\\TelegramBotWeb\\manage.py",
+            "args": [
+                "runserver"
+            ],
+            "django": true
+        },
+        
     ]
 }

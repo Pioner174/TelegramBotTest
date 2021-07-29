@@ -28,6 +28,20 @@ debian/tmp
 debian/python3-telegram
 debian/python3-telegram-doc
 debian/.debhelper
+*.egg-info
+*.pot
+*.py[co]
+.tox/
+__pycache__
+MANIFEST
+dist/
+docs/_build/
+docs/locale/
+node_modules/
+tests/coverage_html/
+tests/.coverage
+build/
+tests/report/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
