@@ -14,5 +14,5 @@ class LocalitytAdmin(admin.ModelAdmin):
 class EmployeetAdmin(admin.ModelAdmin):
     list_display = ['user','name','surname','middle_name','position','department','locality','telephone_r','mobile_phone_r','telephone_comp','telephone_telegram']
     list_editable = ['telephone_r','mobile_phone_r','telephone_comp','telephone_telegram']
-    list_filter = ['telephone_r','mobile_phone_r','telephone_comp','telephone_telegram']
+    search_fields = ('name','surname','middle_name','position','department__name','locality__name','telephone_r','mobile_phone_r','telephone_comp','telephone_telegram')
     
