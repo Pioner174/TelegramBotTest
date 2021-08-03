@@ -28,7 +28,8 @@ def help_command(update: Update, context: CallbackContext) -> None:
 
 def echo(update: Update, context: CallbackContext) -> None:
     """Echo the user message."""
-    update.message.reply_text(input())
+    context.bot.send_message(chat_id=update.effective_chat.id, text=update.message.text)
+
     
 def caps(update, context):
     text_caps = ' '.join(context.args).upper()
