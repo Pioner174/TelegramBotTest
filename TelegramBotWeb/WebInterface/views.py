@@ -2,7 +2,8 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 
-from .forms import LoginForm
+from .forms import LoginForm#, BotStatus
+# from ...PythonTelegramBot.UpdaterBot import *
 
 def user_login(request):
     if request.method == 'POST':
@@ -22,3 +23,6 @@ def user_login(request):
     else:
         form = LoginForm()
     return render(request, 'WebInterface/login.html', {'form':form})
+
+def bot_status(request):
+    pass

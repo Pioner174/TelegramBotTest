@@ -36,7 +36,7 @@ ol {
 }
 
 #header {
-    padding:10px 100px;
+    padding:25px 100%;
     font-size:14px;
     background:#12c064;
     color:#fff;
@@ -47,9 +47,12 @@ ol {
 #header .logo {
     font-family: 'Muli', sans-serif;
     float:left;
-    color:#f3f7cc;
-    font-size:20px;
+    color:#ffba1b;
+    font-size:24px;
+    margin-top: -5px;
+    margin-left: 20%;
     margin-right:10%;
+    position: relative;
 }
 
 #header ul.menu {

@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'phonenumber_field',
     'WebInterface',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -70,10 +71,11 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'TelegramBotWeb.wsgi.application'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
 # Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+# Настройки базы данных по подключению
 
 DATABASES = {
     'default': {
@@ -129,3 +131,7 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#Настройки телеграм бота
+
+TOKEN = '1919630151:AAGEZgjulyTyz-PlvE0urs03p0EvJZNDNrw'
