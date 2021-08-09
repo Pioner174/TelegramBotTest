@@ -4,13 +4,21 @@ import logging
 from telegram import Bot, Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 from telegram.utils.request import Request
+import telegram
 
+from ...models import Employee
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG
 )
 
 logger = logging.getLogger(__name__)
+
+default_keyboard_buttons = [
+    [telegram.KeyboardButton('/start')],
+    [telegram.KeyboardButton('/delete')],
+]
+def_key = telegram.ReplyKeyboardMarkup(default_keyboard_buttons, resize_keyboard=True)
 
 def log_errors(f):
     def inner(*args, **kwargs):
@@ -22,35 +30,76 @@ def log_errors(f):
             raise e
     return inner
 
-@log_errors
+
 def start(update: Update, context: CallbackContext) -> None:
-    """Send a message when the command /start is issued."""
+    """Команда старт для бота, если первый раз то поподает в базу, если нет то приветствие"""
+    chat_id = update.message.chat_id
+    text = update.message.text
+
+    
+    p, created = Employee.objects.get_or_create(
+        t_user_id = chat_id,
+        defaults={
+            'nickname': update.message.from_user.username,
+        }
+    )
+    if (created):
+        context.bot.send_message(
+        chat_id=chat_id, text="Для простой регистрации предоставьте свой номер телефона",
+        reply_markup=telegram.ReplyKeyboardMarkup([
+            [telegram.KeyboardButton(text="Отправить свои контакт", request_contact=True)],["Отмена"]
+        ], resize_keyboard=True, one_time_keyboard =True),
+    )
+    else:
+        user = update.effective_user
+        update.message.reply_markdown_v2(
+        fr'Приветствую {user.mention_markdown_v2()}\!'
+        )
+
+def get_contact(update: Update, context: CallbackContext) -> None:
+    num = update.message.contact.phone_number
+    chat_id = update.message.chat_id
+    Employee.objects.update_or_create(
+        t_user_id = chat_id,
+        defaults={
+            'telephone_telegram': num,
+        }
+    )
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Ваш номер телефона добавлен!", reply_markup=def_key)
+
+def delete(update: Update, context: CallbackContext) -> None:
+    chat_id = update.message.chat_id
+    Employee.objects.filter(t_user_id = chat_id).delete()   
     user = update.effective_user
     update.message.reply_markdown_v2(
-        fr'Hi {user.mention_markdown_v2()}\!'
-    )
+        fr'{user.mention_markdown_v2()}\! вы удалены из базы', reply_markup=def_key
+        )
+    
 
-@log_errors
+    
+
+
 def help_command(update: Update, context: CallbackContext) -> None:
     """Send a message when the command /help is issued."""
     update.message.reply_text('Help!')
 
-@log_errors
+
 def status(update: Update, context: CallbackContext) -> None:
     text_status = str( context.bot.get_me())
     context.bot.send_message(chat_id=update.effective_chat.id, text=text_status)
 
-@log_errors
+
 def echo(update: Update, context: CallbackContext) -> None:
     """Echo the user message."""
-    context.bot.send_message(chat_id=update.effective_chat.id, text=update.message.text)
+    pass
+    # context.bot.send_message(chat_id=update.effective_chat.id, text=update.message.text)
 
-@log_errors   
+   
 def caps(update, context):
     text_caps = ' '.join(context.args).upper()
     context.bot.send_message(chat_id=update.effective_chat.id, text=text_caps)
 
-@log_errors
+
 def unknown(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Sorry, I didn't understand that command.")
 
@@ -67,14 +116,15 @@ class Command(BaseCommand):
         bot = Bot(
             request=request,
             token=settings.TOKEN,
+            
+            
         )
-        print(bot.get_me())
 
 
         # 2 -- обработчик
         updater = Updater(
             bot=bot,
-            use_context=True,
+            use_context=True, 
         )
         dispatcher = updater.dispatcher
 
@@ -83,9 +133,11 @@ class Command(BaseCommand):
         dispatcher.add_handler(CommandHandler("help", help_command))
         dispatcher.add_handler(CommandHandler("caps", caps))
         dispatcher.add_handler(CommandHandler("status", status))
+        dispatcher.add_handler(CommandHandler("delete", delete))
         # on non command i.e message - echo the message on Telegram
         dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
         dispatcher.add_handler(MessageHandler(Filters.command, unknown))
+        dispatcher.add_handler(MessageHandler(Filters.contact, get_contact))
 
         updater.start_polling()
         updater.idle()

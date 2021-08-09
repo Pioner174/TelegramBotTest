@@ -4,6 +4,17 @@
     // Для получения дополнительной информации посетите: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+    
+        {
+            "name": "Django bot",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}\\TelegramBotWeb\\manage.py",
+            "args": [
+                "bot"
+            ],
+            "django": true
+        },
         {
             "name": "Python: Текущий файл",
             "type": "python",

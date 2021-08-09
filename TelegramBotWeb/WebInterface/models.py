@@ -14,7 +14,7 @@ class Locality(models.Model):
 class Employee(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True,null=True,db_index=True)
     nickname =  models.CharField("Ник нейм в телеграмме", max_length=255, db_index=True)
-    t_user_id = models.IntegerField("id в телеге", null=True, blank=True, db_index=True)
+    t_user_id = models.IntegerField("id в телеге", null=True,unique=True , db_index=True)
     name = models.CharField("Имя", max_length=255)
     surname = models.CharField("Фамилия",max_length=255)
     middle_name = models.CharField("Отчество", max_length=255)
