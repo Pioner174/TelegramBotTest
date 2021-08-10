@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Department, Locality, Employee, Group, Memberships
+from .models import Department, Locality, Employee, Group, Memberships, Tmessages
 
 
 
@@ -8,6 +8,9 @@ from .models import Department, Locality, Employee, Group, Memberships
 class DepartmentAdmin(admin.ModelAdmin):
     list_display = ['name']
 
+@admin.register(Tmessages)
+class TmessagesAdmin(admin.ModelAdmin):
+    list_display = ['sender','recipient','text']
 @admin.register(Locality)
 class LocalitytAdmin(admin.ModelAdmin):
     list_display = ['name']

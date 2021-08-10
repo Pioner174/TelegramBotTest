@@ -6,13 +6,14 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Callb
 from telegram.utils.request import Request
 import telegram
 
-from ...models import Employee
+from ...models import Employee, Tmessages
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG
 )
-
 logger = logging.getLogger(__name__)
+
+BOT_STATUS = False
 
 default_keyboard_buttons = [
     [telegram.KeyboardButton('/start')],
@@ -33,14 +34,12 @@ def log_errors(f):
 
 def start(update: Update, context: CallbackContext) -> None:
     """Команда старт для бота, если первый раз то поподает в базу, если нет то приветствие"""
-    chat_id = update.message.chat_id
-    text = update.message.text
-
-    
-    p, created = Employee.objects.get_or_create(
+    chat_id = update.message.chat_id    
+    p, created = Employee.objects.update_or_create(
         t_user_id = chat_id,
         defaults={
             'nickname': update.message.from_user.username,
+            'is_delete': True,
         }
     )
     if (created):
@@ -69,10 +68,10 @@ def get_contact(update: Update, context: CallbackContext) -> None:
 
 def delete(update: Update, context: CallbackContext) -> None:
     chat_id = update.message.chat_id
-    Employee.objects.filter(t_user_id = chat_id).delete()   
+    Employee.objects.filter(t_user_id = chat_id).update(is_deleted=True)
     user = update.effective_user
     update.message.reply_markdown_v2(
-        fr'{user.mention_markdown_v2()}\! вы удалены из базы', reply_markup=def_key
+        fr'{user.mention_markdown_v2()}\! вы отключены от бота', reply_markup=def_key
         )
     
 
@@ -90,9 +89,14 @@ def status(update: Update, context: CallbackContext) -> None:
 
 
 def echo(update: Update, context: CallbackContext) -> None:
-    """Echo the user message."""
-    pass
-    # context.bot.send_message(chat_id=update.effective_chat.id, text=update.message.text)
+    """Send a message when the command /help is issued."""
+    sender_id = Employee.objects.filter(t_user_id =update.message.chat_id).get()
+    text = update.message.text
+    t_id = update.message.message_id
+    m = Tmessages(t_message_id = t_id, sender = sender_id, 
+        recipient = Employee.objects.filter(t_user_id = 1919630151).get(), text = text   # t_user_id = 1919630151  ид бота НАДО МЕНЯТЬ!
+        ).save()
+
 
    
 def caps(update, context):
@@ -103,6 +107,8 @@ def caps(update, context):
 def unknown(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Sorry, I didn't understand that command.")
 
+def bot_status():
+    return BOT_STATUS
 class Command(BaseCommand):
     help = 'Телеграм-бот'
 
@@ -140,4 +146,7 @@ class Command(BaseCommand):
         dispatcher.add_handler(MessageHandler(Filters.contact, get_contact))
 
         updater.start_polling()
+        BOT_STATUS = True
         updater.idle()
+        BOT_STATUS = False
+        
