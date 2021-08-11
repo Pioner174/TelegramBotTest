@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 
-from .forms import LoginForm#, BotStatus
+from .forms import LoginForm, MessSender#, BotStatus
 # from ...PythonTelegramBot.UpdaterBot import *
 
 def user_login(request):
@@ -26,3 +26,7 @@ def user_login(request):
 
 def bot_status(request):
     pass
+
+def mailing(request):
+    malling_form = MessSender()
+    return render(request,'WebInterface/test.html', {'form': malling_form})
