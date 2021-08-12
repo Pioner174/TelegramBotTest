@@ -13,11 +13,11 @@ class Locality(models.Model):
         return self.name    
 class Employee(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True,null=True,db_index=True)
-    nickname =  models.CharField("Ник нейм в телеграмме", max_length=255, db_index=True)
-    t_user_id = models.IntegerField("id в телеге", null=True,unique=True , db_index=True)
-    name = models.CharField("Имя", max_length=255,blank=True,)
-    surname = models.CharField("Фамилия",max_length=255,blank=True)
-    middle_name = models.CharField("Отчество", max_length=255,blank=True)
+    nickname =  models.CharField("Ник нейм в телеграмме", max_length=255, blank=True, db_index=True, null=True)
+    t_user_id = models.IntegerField("id в телеге", unique=True , db_index=True)
+    name = models.CharField("Имя", max_length=255,blank=True,null=True)
+    surname = models.CharField("Фамилия",max_length=255,blank=True,null=True)
+    middle_name = models.CharField("Отчество", max_length=255,blank=True,null=True)
     fullname = models.CharField("ФИО", max_length=255, help_text="Значение подстовляется автоматически после сохранения",blank=True,null=True, db_index=True)
     position = models.CharField("Должность", max_length=255, blank=True,null=True)
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, verbose_name="Департамент",blank=True,null=True,)
@@ -30,13 +30,15 @@ class Employee(models.Model):
     is_banned = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
-        if(self.fullname == None):
-            if(self.surname != ''):
-                self.fullname = self.surname
-            if(self.name != ''):
-                self.fullname +=' ' + self.name
-            if(self.middle_name != ''):
-                self.fullname +=' ' + self.middle_name
+        str_full = ""
+        if(self.surname != None):
+            str_full = self.surname + ' '
+        if(self.name != None):
+            str_full += self.name + ' '
+        if(self.middle_name != None):
+            str_full +=self.middle_name
+        if(str_full not in self.fullname  and str_full != ""):
+            self.fullname = str_full
         super().save(*args, **kwargs)
     def __str__(self):
         if (self.fullname == None):

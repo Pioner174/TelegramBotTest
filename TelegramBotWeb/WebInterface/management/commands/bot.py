@@ -39,7 +39,9 @@ def start(update: Update, context: CallbackContext) -> None:
         t_user_id = chat_id,
         defaults={
             'nickname': update.message.from_user.username,
-            'is_delete': True,
+            'name': update.message.from_user.first_name,
+            'surname': update.message.from_user.last_name,
+            'is_delete': False,
         }
     )
     if (created):
@@ -50,13 +52,16 @@ def start(update: Update, context: CallbackContext) -> None:
         ], resize_keyboard=True, one_time_keyboard =True),
     )
     else:
+        p.is_delete = False
+        p.save()
         user = update.effective_user
         update.message.reply_markdown_v2(
         fr'Приветствую {user.mention_markdown_v2()}\!'
         )
 
 def get_contact(update: Update, context: CallbackContext) -> None:
-    num = update.message.contact.phone_number
+    num = "+"
+    num += update.message.contact.phone_number
     chat_id = update.message.chat_id
     Employee.objects.update_or_create(
         t_user_id = chat_id,
@@ -64,11 +69,11 @@ def get_contact(update: Update, context: CallbackContext) -> None:
             'telephone_telegram': num,
         }
     )
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Ваш номер телефона добавлен!", reply_markup=def_key)
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Ваш номер телефона добавлен!")
 
 def delete(update: Update, context: CallbackContext) -> None:
     chat_id = update.message.chat_id
-    Employee.objects.filter(t_user_id = chat_id).update(is_deleted=True)
+    Employee.objects.filter(t_user_id = chat_id).update(is_delete=True)
     user = update.effective_user
     update.message.reply_markdown_v2(
         fr'{user.mention_markdown_v2()}\! вы отключены от бота', reply_markup=def_key

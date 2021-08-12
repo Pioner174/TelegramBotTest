@@ -7,11 +7,12 @@ class LoginForm(forms.Form):
 
 
 
-class MessSender(forms.Form):
+class PeopleSelect(forms.Form):
     persons = forms.ModelMultipleChoiceField(queryset=Employee.objects.all(),required=False, widget=forms.SelectMultiple,label="Пользователи")
     group = forms.ModelMultipleChoiceField(queryset=Group.objects.all(),required=False, widget=forms.CheckboxSelectMultiple,label="Группы")
-    
+class MessSelect(forms.Form):   
     text_choice = forms.CharField(widget=forms.Textarea, label="Выбранные значения")
+    text_message = forms.CharField(widget=forms.Textarea, label="Текст рассылки")
     
 
 # class BotStatus(forms.Form):

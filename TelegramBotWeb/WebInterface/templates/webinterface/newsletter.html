@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Рассылка{% endblock title %}
+
+{% block content %}
+<h1>Выберите значения, перименятся только уникальные имена</h1>
+<form action="." method="post">
+    {{ form.as_p }}
+    {% csrf_token %}
+    <p><input type="submit" value="Выбор получателей"></p>
+</form>
+{% endblock content %}
