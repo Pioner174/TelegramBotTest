@@ -9,4 +9,11 @@
     {% csrf_token %}
     <p><input type="submit" value="Выбор получателей"></p>
 </form>
+{% if mess_form %}
+<form action="." method="post">
+    {{ mess_form.as_p }}
+    {% csrf_token %}
+    <p><input type="submit" value="Получатели и текст сообщения"></p>
+</form>
+{% endif %}
 {% endblock content %}
