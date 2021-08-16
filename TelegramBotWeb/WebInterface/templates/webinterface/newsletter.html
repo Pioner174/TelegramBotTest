@@ -4,16 +4,18 @@
 
 {% block content %}
 <h1>Выберите значения, перименятся только уникальные имена</h1>
+{% if mess_form %}
+<form action="." method="post">
+    {{ form.as_p }}
+    {{ mess_form.as_p }}
+    {% csrf_token %}
+    <p><input type="submit" value="Отправить"></p>
+</form>
+{% else %}
 <form action="." method="post">
     {{ form.as_p }}
     {% csrf_token %}
     <p><input type="submit" value="Выбор получателей"></p>
-</form>
-{% if mess_form %}
-<form action="." method="post">
-    {{ mess_form.as_p }}
-    {% csrf_token %}
-    <p><input type="submit" value="Получатели и текст сообщения"></p>
 </form>
 {% endif %}
 {% endblock content %}

@@ -32,6 +32,15 @@ def log_errors(f):
     return inner
 
 
+def malling(objects, text):
+    bot = Bot(token=settings.TOKEN)
+    for person in objects:
+        status = bot.send_message(person, text)
+        Tmessages(t_message_id = status['message_id'], sender = Employee.objects.filter(t_user_id = 1919630151).get(), 
+        recipient = Employee.objects.filter(t_user_id = person).get(), text = text   # t_user_id = 1919630151  ид бота НАДО МЕНЯТЬ!
+        ).save()
+        
+
 def start(update: Update, context: CallbackContext) -> None:
     """Команда старт для бота, если первый раз то поподает в базу, если нет то приветствие"""
     chat_id = update.message.chat_id    
@@ -98,7 +107,7 @@ def echo(update: Update, context: CallbackContext) -> None:
     sender_id = Employee.objects.filter(t_user_id =update.message.chat_id).get()
     text = update.message.text
     t_id = update.message.message_id
-    m = Tmessages(t_message_id = t_id, sender = sender_id, 
+    Tmessages(t_message_id = t_id, sender = sender_id, 
         recipient = Employee.objects.filter(t_user_id = 1919630151).get(), text = text   # t_user_id = 1919630151  ид бота НАДО МЕНЯТЬ!
         ).save()
 

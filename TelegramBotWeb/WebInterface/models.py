@@ -38,6 +38,7 @@ class Employee(models.Model):
         if(self.middle_name != None):
             str_full +=self.middle_name
         if(str_full not in self.fullname  and str_full != ""):
+            str_full = str_full.strip()
             self.fullname = str_full
         super().save(*args, **kwargs)
     def __str__(self):
