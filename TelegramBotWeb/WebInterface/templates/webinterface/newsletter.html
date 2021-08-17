@@ -9,6 +9,7 @@
     {{ form.as_p }}
     {{ mess_form.as_p }}
     {% csrf_token %}
+    <!-- Подумать насчет формы и двух кнопок -->
     <p><input type="submit" value="Отправить"></p>
 </form>
 {% else %}
@@ -19,3 +20,5 @@
 </form>
 {% endif %}
 {% endblock content %}
+
+

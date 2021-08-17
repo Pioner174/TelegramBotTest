@@ -17,7 +17,7 @@ BOT_STATUS = False
 
 default_keyboard_buttons = [
     [telegram.KeyboardButton('/start')],
-    [telegram.KeyboardButton('/delete')],
+    [telegram.KeyboardButton('/delete')],  # Кнопки клавиатуры
 ]
 def_key = telegram.ReplyKeyboardMarkup(default_keyboard_buttons, resize_keyboard=True)
 
@@ -33,12 +33,13 @@ def log_errors(f):
 
 
 def malling(objects, text):
+    """Функция для рассылки сообщений пользователям, успешные поподают в базу"""
     bot = Bot(token=settings.TOKEN)
     for person in objects:
         status = bot.send_message(person, text)
         Tmessages(t_message_id = status['message_id'], sender = Employee.objects.filter(t_user_id = 1919630151).get(), 
         recipient = Employee.objects.filter(t_user_id = person).get(), text = text   # t_user_id = 1919630151  ид бота НАДО МЕНЯТЬ!
-        ).save()
+        ).save()  # запись в базу отправленного соообщения
         
 
 def start(update: Update, context: CallbackContext) -> None:
@@ -69,6 +70,7 @@ def start(update: Update, context: CallbackContext) -> None:
         )
 
 def get_contact(update: Update, context: CallbackContext) -> None:
+    """обработка телефонного номера"""
     num = "+"
     num += update.message.contact.phone_number
     chat_id = update.message.chat_id
@@ -93,11 +95,12 @@ def delete(update: Update, context: CallbackContext) -> None:
 
 
 def help_command(update: Update, context: CallbackContext) -> None:
-    """Send a message when the command /help is issued."""
+    """Ответ на команду /help"""
     update.message.reply_text('Help!')
 
 
 def status(update: Update, context: CallbackContext) -> None:
+    """Проверка статуса работы бота, не для всех функций нужен запущенный бот (malling)"""
     text_status = str( context.bot.get_me())
     context.bot.send_message(chat_id=update.effective_chat.id, text=text_status)
 
