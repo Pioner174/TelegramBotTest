@@ -1,6 +1,8 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html>
+    
     <head>
         <title>{% block title %}{% endblock %}</title>
         <link href="{% static "css/base.css" %}" rel="stylesheet">
@@ -8,8 +10,17 @@
     <body>
         <dif id="header">
             <span class="logo">Телеграм БОТ ГРЧЦ УФО</span>
+            <span class ="user">
+                {% if request.user.is_authenticated %}
+                Привет {{ request.user }}!
+                <a href="{% url "logout" %}">Выйти</a>
+                {% else %}
+                    <a href="{% url "login" %}">Войти</a>
+                {% endif %}
+            </span>
         </dif>
         <div id="content">
             {% block content %}{% endblock content %}
         </body>
+        
 </html>

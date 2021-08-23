@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Log-out{% endblock title %}
+
+{% block content %}
+<h1>Выйти</h1>
+<p>Вы успешно разлогинились!
+    Перейти к авторизации? <a href="{% url "login" %}"> Авторизоваться</a>
+</p>
+
+  
+{% endblock content %}

@@ -6,15 +6,15 @@
 <h1>Выберите значения, перименятся только уникальные имена</h1>
 {% if mess_form %}
 <form action="." method="post">
-    {{ form.as_p }}
-    {{ mess_form.as_p }}
+    {{ form }}
+    {{ mess_form }}
     {% csrf_token %}
     <!-- Подумать насчет формы и двух кнопок -->
     <p><input type="submit" value="Отправить"></p>
 </form>
 {% else %}
 <form action="." method="post">
-    {{ form.as_p }}
+    {{ form }}
     {% csrf_token %}
     <p><input type="submit" value="Выбор получателей"></p>
 </form>

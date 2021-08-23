@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'WebInterface',
     'crispy_forms',
+    "django_bootstrap5",
 ]
 
 MIDDLEWARE = [
@@ -135,3 +136,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #Настройки телеграм бота
 
 TOKEN = '1919630151:AAGEZgjulyTyz-PlvE0urs03p0EvJZNDNrw'
+
+LOGIN_REDIRECT_URL = 'mail'
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'

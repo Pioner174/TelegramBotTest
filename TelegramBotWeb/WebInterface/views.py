@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 
 from .forms import LoginForm, PeopleSelect, MessSelect
 from .models import *
@@ -29,7 +30,7 @@ def user_login(request):
 
 def bot_status(request):
     pass
-
+@login_required
 def mailing(request):
     if request.method == 'POST':
         malling_form = PeopleSelect(request.POST, prefix="select_form")
