@@ -1,9 +1,9 @@
 {% extends "base.html" %}
-
-{% block title %}Log-in{% endblock title %}
+{% load django_bootstrap5 %}
+{% block title %}Авторизация{% endblock title %}
 
 {% block content %}
-<h1>Авторизация</h1>
+
 {% if form.errors %}
 <p> Ваш логин или пароль не верный, попробуйте еще раз или обратитесь к администратору</p>
 {% else %}
@@ -11,7 +11,7 @@
 {% endif %}
 <div class="login-form">
     <form action="." method="post">
-        {{ form }}
+        {% bootstrap_form form %}
         {% csrf_token %}
         <input type="hidden" name="next" value="{{next}}" />
         <p><input type="submit" value="Log-in"></p>

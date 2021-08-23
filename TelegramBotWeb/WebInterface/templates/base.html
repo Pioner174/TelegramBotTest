@@ -1,26 +1,29 @@
-{% load static %}
+{% extends 'webinterface/bootstrap.html' %}
 
-<!DOCTYPE html>
-<html>
-    
-    <head>
-        <title>{% block title %}{% endblock %}</title>
-        <link href="{% static "css/base.css" %}" rel="stylesheet">
-    </head>
-    <body>
-        <dif id="header">
-            <span class="logo">Телеграм БОТ ГРЧЦ УФО</span>
-            <span class ="user">
-                {% if request.user.is_authenticated %}
-                Привет {{ request.user }}!
-                <a href="{% url "logout" %}">Выйти</a>
-                {% else %}
-                    <a href="{% url "login" %}">Войти</a>
-                {% endif %}
-            </span>
-        </dif>
-        <div id="content">
-            {% block content %}{% endblock content %}
-        </body>
+
+{% block bootstrap5_content %}
+    <div class="container">
+        <h1>{% block title %}{% endblock %}</h1>
+
+        <ul class="nav nav-pills">
+            <li class="nav-item"> 
+                <span class="logo">Телеграм БОТ ГРЧЦ УФО</span>     
+            </li>
+            <li class="nav-item">
+                <span class ="user">
+                    {% if request.user.is_authenticated %}
+                    Привет {{ request.user }}!
+                    <a href="{% url "logout" %}">Выйти</a>
+                    {% else %}
+                        <a href="{% url "login" %}">Войти</a>
+                    {% endif %}
+                </span>
+            </li>    
+        </ul>
+
         
-</html>
+
+        {% block content %}{% endblock %}
+    </div>
+
+{% endblock %}

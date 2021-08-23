@@ -1,22 +1,24 @@
 {% extends "base.html" %}
-
+{% load django_bootstrap5 %}
 {% block title %}Рассылка{% endblock title %}
 
 {% block content %}
 <h1>Выберите значения, перименятся только уникальные имена</h1>
 {% if mess_form %}
 <form action="." method="post">
-    {{ form }}
-    {{ mess_form }}
+    {% bootstrap_form form %}
+    {% bootstrap_form mess_form %}
     {% csrf_token %}
     <!-- Подумать насчет формы и двух кнопок -->
-    <p><input type="submit" value="Отправить"></p>
+    {% bootstrap_button button_type="submit" content="Отправить" %}
+    
 </form>
 {% else %}
 <form action="." method="post">
-    {{ form }}
+    {% bootstrap_form form %}
     {% csrf_token %}
-    <p><input type="submit" value="Выбор получателей"></p>
+    {% bootstrap_button button_type="submit" content="Выбор получателей" %}
+    
 </form>
 {% endif %}
 {% endblock content %}
