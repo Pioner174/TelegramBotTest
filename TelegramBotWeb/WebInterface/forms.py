@@ -11,9 +11,15 @@ class PeopleSelect(forms.Form):
     persons = forms.ModelMultipleChoiceField(queryset=Employee.objects.all(),required=False, widget=forms.SelectMultiple,label="Пользователи")
     group = forms.ModelMultipleChoiceField(queryset=Group.objects.all(),required=False, widget=forms.CheckboxSelectMultiple,label="Группы")
 class MessSelect(forms.Form):   
-    text_choice = forms.CharField(widget=forms.Textarea, label="Выбранные значения")
-    text_message = forms.CharField(widget=forms.Textarea, label="Текст рассылки")
+    text_choice = forms.CharField(label="Выбранные значения")
+    text_message = forms.CharField(label="Текс сообщения" )
+
+   
+
     
+class ChatForm(forms.Form):
+    text_dialog = forms.CharField(widget=forms.Textarea, label="Диалог")
+    text_enter = forms.CharField()
 
 # class BotStatus(forms.Form):
 #     status = forms.BooleanField(label="Статус бота")

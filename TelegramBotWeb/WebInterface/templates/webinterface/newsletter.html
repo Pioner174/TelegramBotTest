@@ -3,24 +3,74 @@
 {% block title %}Рассылка{% endblock title %}
 
 {% block content %}
-<h1>Выберите значения, перименятся только уникальные имена</h1>
-{% if mess_form %}
-<form action="." method="post">
-    {% bootstrap_form form %}
-    {% bootstrap_form mess_form %}
-    {% csrf_token %}
-    <!-- Подумать насчет формы и двух кнопок -->
-    {% bootstrap_button button_type="submit" content="Отправить" %}
+    {% if message %}
+        <script>
+            alert('{{ message }}');
+        </script>
+    {% endif %}
     
-</form>
-{% else %}
 <form action="." method="post">
-    {% bootstrap_form form %}
-    {% csrf_token %}
-    {% bootstrap_button button_type="submit" content="Выбор получателей" %}
     
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="input-group input-group-lg mb-3">
+                <span class="input-group-text">Пользователи</span>
+                <span class="input-group-text" >
+                
+                        <select name="select_form-persons" class="form-select" id="id_select_form-persons" multiple="">
+                            
+                                
+                            {% for person in form.persons %}
+                            
+                            {{person}}
+
+                            {% endfor %}
+                            
+                        </select>
+                </span>
+                <span class="input-group-text">
+                    <button type="button" class="close" id="clear_all" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+           
+                <span class="input-group-text">Группы</span>
+                    
+                        {% for group in form.group %}
+                        <div class="form-check form-check-inline">
+                        {{group}}
+                        </div>
+                        {% endfor %}
+                    
+            
+        </div>
+    </div>
+    {% if mess_form %}
+    {% bootstrap_field mess_form.text_message field_class='form-floating mb-4' %}
+    {% for field in mess_form %}
+        <div class="form-floating mb-4">
+            <textarea class="form-control" placeholder="Leave a comment here" id="{{ field.name }}" style="height: 100px">{{ field.value }}</textarea>
+            <label for="floatingTextarea2">{{ field.label }}</label>
+        </div>
+    {% endfor %}   
+        {% bootstrap_button button_type="submit" content="Отправить" %}
+    {% endif %}
+    {% if not mess_form %}
+        {% bootstrap_button button_type="submit" content="Выбор получателей" %}
+    {% endif %}
+    {% csrf_token %}
 </form>
-{% endif %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script>
+    $('#clear_all').bind('click', function(){
+        $("#id_select_form-persons").val([]); 
+    });
+
+</script>
 {% endblock content %}
 
 

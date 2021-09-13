@@ -47,18 +47,25 @@ def mailing(request):
                         str_id.append(t_id['t_user_id'])
             str_id = set(str_id)
             emp_name = Employee.objects.filter(t_user_id__in = str_id)
-            if message_form.is_valid():
-                text_message = message_form.cleaned_data['text_message']
-                malling(str_id, text_message)
+            
+
             str_name = []
             for name in emp_name:
                 str_name.append(str(name))
             
-
-            message_form = MessSelect(initial={"text_choice": ', '.join(str_name)}, prefix="mess_form")
-            
+            if message_form.is_valid():
+                text_message = message_form.cleaned_data['text_message']
+                malling(str_id, text_message)
+                message="Сообщения отправленны!"
+                message_form = MessSelect(initial={"text_choice": ', '.join(str_name)}, prefix="mess_form")
+                return render(request,'WebInterface/newsletter.html', {'form': malling_form, 'mess_form':message_form, 'message':message})
+            message_form = MessSelect(initial={"text_choice": ', '.join(str_name)}, prefix="mess_form")    
             return render(request,'WebInterface/newsletter.html', {'form': malling_form, 'mess_form':message_form})
 
     else:
         malling_form = PeopleSelect(prefix="select_form")
     return render(request,'WebInterface/newsletter.html', {'form': malling_form})
+
+@login_required
+def chat(request):
+    pass
