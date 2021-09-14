@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load django_bootstrap5 %}
+
 {% block title %}Рассылка{% endblock title %}
 
 {% block content %}
@@ -8,10 +8,10 @@
             alert('{{ message }}');
         </script>
     {% endif %}
-    
+<h1>Рассылка</h1>    
 <form action="." method="post">
     
-    <div class="row mt-4">
+    <div class="row mt-4 mb-4">
         <div class="col-md-6">
             <div class="input-group input-group-lg mb-3">
                 <span class="input-group-text">Пользователи</span>
@@ -49,17 +49,18 @@
         </div>
     </div>
     {% if mess_form %}
-    {% bootstrap_field mess_form.text_message field_class='form-floating mb-4' %}
+    
     {% for field in mess_form %}
+        
         <div class="form-floating mb-4">
-            <textarea class="form-control" placeholder="Leave a comment here" id="{{ field.name }}" style="height: 100px">{{ field.value }}</textarea>
+            {{ field }}
             <label for="floatingTextarea2">{{ field.label }}</label>
         </div>
     {% endfor %}   
-        {% bootstrap_button button_type="submit" content="Отправить" %}
+    <button type="submit" class="btn btn-success">Отправить сообщение</button>
     {% endif %}
     {% if not mess_form %}
-        {% bootstrap_button button_type="submit" content="Выбор получателей" %}
+    <button type="submit" class="btn btn-success">Выбор получателей</button>
     {% endif %}
     {% csrf_token %}
 </form>

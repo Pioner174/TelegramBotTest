@@ -10,11 +10,14 @@ class LoginForm(forms.Form):
 class PeopleSelect(forms.Form):
     persons = forms.ModelMultipleChoiceField(queryset=Employee.objects.all(),required=False, widget=forms.SelectMultiple,label="Пользователи")
     group = forms.ModelMultipleChoiceField(queryset=Group.objects.all(),required=False, widget=forms.CheckboxSelectMultiple,label="Группы")
+    
 class MessSelect(forms.Form):   
-    text_choice = forms.CharField(label="Выбранные значения")
-    text_message = forms.CharField(label="Текс сообщения" )
-
-   
+    text_choice = forms.CharField(widget=forms.Textarea(),label="Выбранные значения")
+    text_message = forms.CharField(widget=forms.Textarea(),label="Текс сообщения" )
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['text_message'].widget.attrs.update({'class':'form-control','style':'height: 100px','placeholder':'Leave a comment here'})
+        self.fields['text_choice'].widget.attrs.update({'class':'form-control','style':'height: 100px','placeholder':'Leave a comment here'})
 
     
 class ChatForm(forms.Form):
