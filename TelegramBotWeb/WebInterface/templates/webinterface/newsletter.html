@@ -68,9 +68,33 @@
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <script>
     $('#clear_all').bind('click', function(){
-        $("#id_select_form-persons").val([]); 
+        $("#id_select_form-persons").val([]);
+        // $("#id_mess_form-text_choice").val([]); 
     });
+    var changeEmployee = function(){
+        let values = $("#id_select_form-persons").val();
+        if (values.length > 0){
+            let data = {
+                id_people: values
+            }
+        
+            $.ajax({
+                method: "GET",
+                dataType: "json",
+                data: data,
+                url: '{% url "update_people" %}',
+                success: function(data){ 
+                    $("#id_mess_form-text_choice").val(data['data']);
+                }
+            });
+        }
+    };
+    changeEmployee();
+    if ($( "select" ).trigger( "change" ) || $('input[type=checkbox]').on("click")){
 
+    }
+    $( "select" ).change().trigger( "change" );
+    $('input[type=checkbox]').on( "click",changeEmployee);
 </script>
 {% endblock content %}
 

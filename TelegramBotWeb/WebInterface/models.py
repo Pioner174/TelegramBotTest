@@ -44,8 +44,8 @@ class Employee(models.Model):
     def __str__(self):
         if (self.fullname == None):
             return self.nickname
-        return self.fullname     
-
+        return self.fullname    
+   
 class Group(models.Model):
     name = models.CharField("Название группы", max_length=255, db_index=True)
     members = models.ManyToManyField(Employee, through='Memberships', through_fields=('group', 'person'))

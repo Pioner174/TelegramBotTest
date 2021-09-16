@@ -10,4 +10,5 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(template_name="webInterface/logged_out.html"), name='logout'),
     path('mailing/', views.mailing, name='mail'),
     path('chat/', views.chat, name='chat'),
+    path('update_people/',views.dynamic_people_update, name='update_people'),
 ]

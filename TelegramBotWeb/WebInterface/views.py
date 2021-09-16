@@ -1,7 +1,9 @@
 from django.http import HttpResponse
+from django.http.response import JsonResponse
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.views import View
 
 from .forms import LoginForm, PeopleSelect, MessSelect
 from .models import *
@@ -65,6 +67,17 @@ def mailing(request):
     else:
         malling_form = PeopleSelect(prefix="select_form")
     return render(request,'WebInterface/newsletter.html', {'form': malling_form})
+
+def dynamic_people_update(request):
+    if request.method == "GET" and request.is_ajax():
+        people_id = request.GET.getlist('id_people[]', None)
+        peoples = Employee.objects.filter(pk__in=people_id)
+        data = [str(people) for people in peoples]
+        return JsonResponse({'data': data}, status=200)
+    JsonResponse({"error": ""}, status=400)
+
+
+
 
 @login_required
 def chat(request):

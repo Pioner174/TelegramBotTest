@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load django_bootstrap5 %}
+
 {% block title %}Авторизация{% endblock title %}
 
 {% block content %}
@@ -7,11 +7,38 @@
 {% if form.errors %}
 <p> Ваш логин или пароль не верный, попробуйте еще раз или обратитесь к администратору</p>
 {% else %}
-<p>Пожалуйста введите свой логин и пароль для входа на сайт!</p>
 {% endif %}
+
+    <div class="modal-dialog" role="document">
+      <div class="modal-content rounded-5 shadow">
+        <div class="modal-header p-5 pb-4 border-bottom-0">
+          <!-- <h5 class="modal-title">Modal title</h5> -->
+          <h2 class="fw-bold mb-0">Авторизация</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+  
+        <div class="modal-body p-5 pt-0">
+          <form class="">
+            <div class="form-floating mb-3">
+              <input type="login" class="form-control rounded-4" id="floatingInput" placeholder="login" value="{{form.username.value}}">
+              <label for="floatingInput">Login</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="password" class="form-control rounded-4" id="floatingPassword" placeholder="Password" value="{{form.password.value}}">
+              <label for="floatingPassword">Password</label>
+            </div>
+            <button class="w-100 mb-2 btn btn-lg rounded-4 btn-primary" type="submit">Войти</button>
+            {% csrf_token %}
+            <small class="text-muted">Пожалуйста введите свой логин и пароль для входа на сайт!</small>
+            
+          </form>
+        </div>
+      </div>
+    </div>
+  
 <div class="login-form">
     <form action="." method="post">
-        {% bootstrap_form form %}
+        {{ form }}
         {% csrf_token %}
         <input type="hidden" name="next" value="{{next}}" />
         <p><input type="submit" value="Log-in"></p>
