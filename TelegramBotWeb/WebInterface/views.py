@@ -71,6 +71,7 @@ def mailing(request):
 def dynamic_people_update(request):
     if request.method == "GET" and request.is_ajax():
         people_id = request.GET.getlist('id_people[]', None)
+        group_id = request.GET.getlist('id_group[]', None)
         peoples = Employee.objects.filter(pk__in=people_id)
         data = [str(people) for people in peoples]
         return JsonResponse({'data': data}, status=200)

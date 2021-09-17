@@ -69,31 +69,43 @@
 <script>
     $('#clear_all').bind('click', function(){
         $("#id_select_form-persons").val([]);
-        // $("#id_mess_form-text_choice").val([]); 
+         
     });
-    var changeEmployee = function(){
-        let values = $("#id_select_form-persons").val();
-        if (values.length > 0){
-            let data = {
-                id_people: values
-            }
+    var group_array_id = function(){
+        var group = $("input[type=checkbox]:checked");
+        var group_array = Array.prototype.slice.call(group);
         
-            $.ajax({
-                method: "GET",
-                dataType: "json",
-                data: data,
-                url: '{% url "update_people" %}',
-                success: function(data){ 
-                    $("#id_mess_form-text_choice").val(data['data']);
-                }
-            });
-        }
-    };
-    changeEmployee();
-    if ($( "select" ).trigger( "change" ) || $('input[type=checkbox]').on("click")){
+        var group_id_array = []
+        $.each(group_array,function(k, v ) {
+            
+            group_id_array.push(v.value)
 
+        });
+        console.log(group_id_array);
+        return group_id_array
     }
-    $( "select" ).change().trigger( "change" );
+    group_array_id();
+    var changeEmployee = function(){
+        let people = $("#id_select_form-persons").val();
+        let data = {
+            id_people: people,
+            id_group: group_array_id
+        }
+        
+        $.ajax({
+            method: "GET",
+            dataType: "json",
+            data: data,
+            url: '{% url "update_people" %}',
+            success: function(data){ 
+                $("#id_mess_form-text_choice").val(data['data']);
+            }
+        });
+        
+    }
+    changeEmployee();
+    
+    $( "select" ).change(changeEmployee).trigger( "change" );
     $('input[type=checkbox]').on( "click",changeEmployee);
 </script>
 {% endblock content %}
