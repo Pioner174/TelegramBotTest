@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.views import View
+from  django.db.models  import  Q
 
 from .forms import LoginForm, PeopleSelect, MessSelect
 from .models import *
@@ -71,8 +72,11 @@ def mailing(request):
 def dynamic_people_update(request):
     if request.method == "GET" and request.is_ajax():
         people_id = request.GET.getlist('id_people[]', None)
-        group_id = request.GET.getlist('id_group[]', None)
-        peoples = Employee.objects.filter(pk__in=people_id)
+        group_id = []
+        if request.GET.get('id_group', None)!='':
+            group_id = [int(s) for s in (request.GET.get('id_group', None).split(','))]
+
+        peoples = Employee.objects.filter(Q(pk__in=people_id)| Q(pk__in=Memberships.objects.filter(group__in=group_id).values_list('person'))).distinct()
         data = [str(people) for people in peoples]
         return JsonResponse({'data': data}, status=200)
     JsonResponse({"error": ""}, status=400)
