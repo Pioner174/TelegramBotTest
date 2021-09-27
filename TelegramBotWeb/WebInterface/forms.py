@@ -1,11 +1,17 @@
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm
+
 from .models import Employee, Group
 
 class LoginForm(forms.Form):
     username = forms.CharField(label="Логин")
     password = forms.CharField(label="Пароль", widget=forms.PasswordInput)
 
-
+class UserLoginForm(AuthenticationForm):
+    def __init__(self, request=None, *args, **kwargs):
+        super(UserLoginForm, self).__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({'type':'login','class':'form-control rounded-4','placeholder':'login'})
+        self.fields['password'].widget.attrs.update({'class':'form-control rounded-4','placeholder':'Password'})
 
 class PeopleSelect(forms.Form):
     persons = forms.ModelMultipleChoiceField(queryset=Employee.objects.all(),required=False, widget=forms.SelectMultiple,label="Пользователи")
